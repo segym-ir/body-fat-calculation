@@ -1,0 +1,1068 @@
+<style>
+
+    /* ─── Design Tokens ─────────────────────────────────── */
+    :root {
+      --navy-950: #060d1f;
+      --navy-900: #0b132b;
+      --navy-800: #111d3a;
+      --navy-700: #1c2e52;
+      --navy-600: #1e3a5f;
+      --card-bg:  #0f1a2e;
+      --card-border: #1a2d4a;
+      --cyan:     #00f0ff;
+      --cyan-dim: rgba(0,240,255,0.15);
+      --cyan-glow:rgba(0,240,255,0.06);
+      --gold:     #d4af37;
+      --gold-dim: rgba(212,175,55,0.18);
+      --green:    #00ff88;
+      --orange:   #ff9f43;
+      --red:      #ff4757;
+      --white:    #f0f4ff;
+      --muted:    #7a8caa;
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 20px;
+      --radius-xl: 28px;
+      --shadow-card: 0 4px 32px rgba(0,0,0,0.45);
+      --shadow-glow: 0 0 24px rgba(0,240,255,0.12);
+      --transition: 0.22s cubic-bezier(.4,0,.2,1);
+      --font: 'Vazirmatn', system-ui, sans-serif;
+    }
+
+    /* ─── Reset & Base ──────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--font);
+      background: var(--navy-950);
+      color: var(--white);
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+    button { font-family: var(--font); cursor: pointer; border: none; background: none; }
+    input  { font-family: var(--font); }
+    *:focus-visible {
+      outline: 2px solid var(--cyan);
+      outline-offset: 3px;
+      border-radius: var(--radius-sm);
+    }
+
+    /* ─── Layout ────────────────────────────────────────── */
+    .app {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 20px 60px;
+    }
+
+    /* ─── Header ────────────────────────────────────────── */
+    .header {
+      text-align: center;
+      padding: 48px 0 36px;
+      position: relative;
+    }
+    .header::after {
+      content: '';
+      display: block;
+      width: 200px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--cyan), transparent);
+      margin: 0 auto;
+      margin-top: 28px;
+      opacity: 0.4;
+    }
+    .logo {
+      font-size: clamp(28px, 5vw, 42px);
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      color: var(--white);
+    }
+    .logo-brand {
+      color: var(--cyan);
+      text-shadow: 0 0 20px rgba(0,240,255,0.5);
+    }
+    .subtitle {
+      margin-top: 10px;
+      font-size: 14px;
+      color: var(--muted);
+      font-weight: 400;
+      letter-spacing: 0.3px;
+    }
+
+    /* ─── Tabs ──────────────────────────────────────────── */
+    .tabs-wrapper {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-xl);
+      padding: 5px;
+      display: inline-flex;
+      width: 100%;
+      position: relative;
+      margin-bottom: 28px;
+      box-shadow: var(--shadow-card);
+    }
+    .tab-btn {
+      flex: 1;
+      padding: 13px 10px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--muted);
+      border-radius: var(--radius-lg);
+      transition: color var(--transition);
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      white-space: nowrap;
+    }
+    .tab-btn[aria-selected="true"] { color: var(--navy-900); }
+    .tab-btn:hover:not([aria-selected="true"]) { color: var(--white); }
+    .tab-indicator {
+      position: absolute;
+      top: 5px;
+      height: calc(100% - 10px);
+      background: linear-gradient(135deg, var(--cyan) 0%, #00b8ff 100%);
+      border-radius: var(--radius-lg);
+      transition: left var(--transition), width var(--transition);
+      box-shadow: 0 0 20px rgba(0,240,255,0.3);
+      z-index: 0;
+    }
+
+    /* ─── Calculator Layout ─────────────────────────────── */
+    .calculator-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      align-items: start;
+    }
+    @media (max-width: 720px) {
+      .calculator-layout { grid-template-columns: 1fr; }
+    }
+
+    /* ─── Card ──────────────────────────────────────────── */
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-xl);
+      padding: 28px;
+      box-shadow: var(--shadow-card);
+    }
+    .card-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--cyan);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 22px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .card-title::before {
+      content: '';
+      display: block;
+      width: 3px;
+      height: 16px;
+      background: var(--cyan);
+      border-radius: 2px;
+      box-shadow: 0 0 8px var(--cyan);
+    }
+
+    /* ─── Gender Toggle ─────────────────────────────────── */
+    .gender-toggle {
+      display: flex;
+      background: var(--navy-800);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-md);
+      padding: 4px;
+      margin-bottom: 22px;
+      position: relative;
+    }
+    .gender-indicator {
+      position: absolute;
+      top: 4px;
+      height: calc(100% - 8px);
+      background: linear-gradient(135deg, var(--gold) 0%, #f0c940 100%);
+      border-radius: var(--radius-sm);
+      transition: left var(--transition), width var(--transition);
+      box-shadow: 0 0 14px rgba(212,175,55,0.3);
+    }
+    .gender-btn {
+      flex: 1;
+      padding: 10px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--muted);
+      border-radius: var(--radius-sm);
+      position: relative;
+      z-index: 1;
+      transition: color var(--transition);
+    }
+    .gender-btn.active { color: var(--navy-900); }
+    .gender-btn:hover:not(.active) { color: var(--white); }
+
+    /* ─── Input Field ───────────────────────────────────── */
+    .field-group {
+      margin-bottom: 16px;
+    }
+    .field-label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--muted);
+      margin-bottom: 7px;
+      letter-spacing: 0.3px;
+    }
+    .field-wrap {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+    .field-input {
+      width: 100%;
+      background: var(--navy-800);
+      border: 1.5px solid var(--card-border);
+      border-radius: var(--radius-md);
+      padding: 13px 52px 13px 16px;
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--white);
+      transition: border-color var(--transition), box-shadow var(--transition);
+    }
+    .field-input::placeholder { color: #3a4d6a; }
+    .field-input:focus {
+      outline: none;
+      border-color: var(--cyan);
+      box-shadow: 0 0 0 3px var(--cyan-dim);
+    }
+    .field-input.error { border-color: var(--red); }
+    .field-input.error:focus { box-shadow: 0 0 0 3px rgba(255,71,87,0.15); }
+    .field-unit {
+      position: absolute;
+      left: 14px;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--muted);
+      pointer-events: none;
+      letter-spacing: 0.5px;
+    }
+    .field-error {
+      margin-top: 6px;
+      font-size: 11px;
+      color: var(--red);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .field-error::before { content: '⚠'; }
+
+    /* ─── Helper Text ───────────────────────────────────── */
+    .helper-text {
+      font-size: 11.5px;
+      color: var(--muted);
+      line-height: 1.7;
+      margin-top: 18px;
+      padding: 12px 14px;
+      background: var(--cyan-glow);
+      border-right: 2px solid var(--cyan);
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    }
+
+    /* ─── Inputs Grid ───────────────────────────────────── */
+    .inputs-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0 14px;
+    }
+    .inputs-grid .field-group:last-child:nth-child(odd) {
+      grid-column: 1 / -1;
+    }
+    @media (max-width: 480px) {
+      .inputs-grid { grid-template-columns: 1fr; }
+    }
+
+    /* ─── Result Card ───────────────────────────────────── */
+    .result-card {
+      position: relative;
+      overflow: hidden;
+    }
+    .result-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: var(--radius-xl);
+      background: radial-gradient(circle at 50% 0%, var(--cyan-glow) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .result-empty {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 280px;
+      color: var(--muted);
+      gap: 12px;
+    }
+    .result-empty-icon {
+      font-size: 44px;
+      opacity: 0.3;
+    }
+    .result-empty-text {
+      font-size: 13px;
+      text-align: center;
+      line-height: 1.6;
+    }
+
+    /* ─── Gauge ─────────────────────────────────────────── */
+    .gauge-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+    }
+    .gauge-svg { overflow: visible; }
+    .gauge-track { transition: stroke-dashoffset 0.8s cubic-bezier(.4,0,.2,1); }
+    .gauge-value-display {
+      text-align: center;
+      margin-top: -10px;
+    }
+    .gauge-number {
+      font-size: 42px;
+      font-weight: 800;
+      line-height: 1;
+      transition: color 0.5s;
+    }
+    .gauge-label {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+
+    /* ─── Range Badge ───────────────────────────────────── */
+    .range-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 7px 16px;
+      border-radius: 100px;
+      font-size: 13px;
+      font-weight: 700;
+      margin-top: 16px;
+      transition: background var(--transition), color var(--transition);
+    }
+    .range-badge-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+    }
+
+    /* ─── Result Description ────────────────────────────── */
+    .result-description {
+      margin-top: 18px;
+      font-size: 12.5px;
+      color: var(--muted);
+      line-height: 1.75;
+      border-top: 1px solid var(--card-border);
+      padding-top: 16px;
+    }
+    .result-recommendation {
+      margin-top: 12px;
+      font-size: 12px;
+      padding: 10px 12px;
+      background: var(--gold-dim);
+      border-right: 2px solid var(--gold);
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+      color: #e8d080;
+      line-height: 1.6;
+    }
+
+    /* ─── BMI Extra ─────────────────────────────────────── */
+    .bmi-extra {
+      display: flex;
+      gap: 12px;
+      margin-top: 18px;
+      border-top: 1px solid var(--card-border);
+      padding-top: 18px;
+    }
+    .bmi-stat {
+      flex: 1;
+      background: var(--navy-800);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-md);
+      padding: 14px;
+      text-align: center;
+    }
+    .bmi-stat-value {
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--white);
+    }
+    .bmi-stat-label {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+
+    /* ─── Skinfold Sum ──────────────────────────────────── */
+    .skinfold-sum {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--navy-800);
+      border: 1px solid var(--cyan-dim);
+      border-radius: var(--radius-md);
+      padding: 12px 16px;
+      margin-top: 6px;
+      margin-bottom: 10px;
+    }
+    .skinfold-sum-label {
+      font-size: 12px;
+      color: var(--muted);
+    }
+    .skinfold-sum-value {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--cyan);
+    }
+
+    /* ─── Range Bar ─────────────────────────────────────── */
+    .range-bar-wrap {
+      margin-top: 18px;
+    }
+    .range-bar-label {
+      font-size: 11px;
+      color: var(--muted);
+      margin-bottom: 7px;
+    }
+    .range-bar {
+      height: 6px;
+      background: var(--navy-800);
+      border-radius: 100px;
+      overflow: hidden;
+      position: relative;
+    }
+    .range-bar-fill {
+      height: 100%;
+      border-radius: 100px;
+      transition: width 0.8s cubic-bezier(.4,0,.2,1), background 0.5s;
+    }
+    .range-ticks {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 5px;
+    }
+    .range-tick {
+      font-size: 10px;
+      color: #3a4d6a;
+    }
+
+    /* ─── Responsive ────────────────────────────────────── */
+    @media (max-width: 480px) {
+      .card { padding: 20px 16px; }
+      .header { padding: 32px 0 24px; }
+      .tabs-wrapper { border-radius: var(--radius-lg); }
+      .tab-btn { font-size: 12px; padding: 11px 6px; }
+    }
+  
+</style>
+
+<div class="app">
+<!-- Header -->
+<header class="header">
+<h1 class="logo"><span class="logo-brand">محاسبه چربی بدن آنلاین - 3 روش جدید محاسبه چربی بدن در خانه!</span></h1>
+<p class="subtitle">جامع‌ترین ماشین حساب محاسبه درصد چربی بدن — سه روش در یک ابزار</p>
+</header>
+<!-- Tabs -->
+<div aria-label="روش‌های محاسبه" class="tabs-wrapper" role="tablist">
+<div class="tab-indicator" id="tabIndicator"></div>
+<button aria-selected="true" class="tab-btn" data-tab="navy" onclick="switchTab('navy')" role="tab">روش نیروی دریایی</button>
+<button aria-selected="false" class="tab-btn" data-tab="bmi" onclick="switchTab('bmi')" role="tab">BMI + سن</button>
+<button aria-selected="false" class="tab-btn" data-tab="skinfold" onclick="switchTab('skinfold')" role="tab">چین پوستی</button>
+</div>
+<!-- Calculator Layout -->
+<div class="calculator-layout">
+<!-- ── FORM PANEL ── -->
+<div class="card" id="formCard">
+<!-- NAVY PANEL -->
+<div id="panel-navy">
+<div class="card-title">روش نیروی دریایی آمریکا</div>
+<div aria-label="جنسیت" class="gender-toggle" role="group">
+<div class="gender-indicator" id="navyGenderIndicator"></div>
+<button aria-pressed="true" class="gender-btn active" id="navyMaleBtn" onclick="setGender('navy','male')">مرد</button>
+<button aria-pressed="false" class="gender-btn" id="navyFemaleBtn" onclick="setGender('navy','female')">زن</button>
+</div>
+<div class="inputs-grid" id="navyInputs">
+<!-- filled by JS -->
+</div>
+<p class="helper-text">روش نیروی دریایی آمریکا یکی از دقیق‌ترین روش‌های تخمینی برای سنجش درصد چربی بدن است و تنها به اندازه‌گیری محیط بدن نیاز دارد.</p>
+</div>
+<!-- BMI PANEL -->
+<div id="panel-bmi" style="display:none">
+<div class="card-title">روش BMI و سن</div>
+<div aria-label="جنسیت" class="gender-toggle" role="group">
+<div class="gender-indicator" id="bmiGenderIndicator"></div>
+<button aria-pressed="true" class="gender-btn active" id="bmiMaleBtn" onclick="setGender('bmi','male')">مرد</button>
+<button aria-pressed="false" class="gender-btn" id="bmiFemaleBtn" onclick="setGender('bmi','female')">زن</button>
+</div>
+<div class="inputs-grid" id="bmiInputs"></div>
+<p class="helper-text">این روش یک تخمین کلی ارائه می‌دهد و برای غربالگری عمومی مناسب است. برای نتایج دقیق‌تر از روش نیروی دریایی یا کالیپر استفاده کنید.</p>
+</div>
+<!-- SKINFOLD PANEL -->
+<div id="panel-skinfold" style="display:none">
+<div class="card-title">روش چین پوستی (کالیپر)</div>
+<div aria-label="جنسیت" class="gender-toggle" role="group">
+<div class="gender-indicator" id="skinfoldGenderIndicator"></div>
+<button aria-pressed="true" class="gender-btn active" id="skinfoldMaleBtn" onclick="setGender('skinfold','male')">مرد</button>
+<button aria-pressed="false" class="gender-btn" id="skinfoldFemaleBtn" onclick="setGender('skinfold','female')">زن</button>
+</div>
+<div id="skinfoldInputs"></div>
+<div class="skinfold-sum">
+<span class="skinfold-sum-label">مجموع ۶ نقطه</span>
+<span class="skinfold-sum-value" id="skinfoldSum">۰ mm</span>
+</div>
+<p class="helper-text">این روش به اندازه‌گیری دقیق با کالیپر نیاز دارد و بهترین نتایج را با متخصص ورزش ارائه می‌دهد.</p>
+</div>
+</div><!-- /formCard -->
+<!-- ── RESULT CARD ── -->
+<div aria-label="نتیجه محاسبه" aria-live="polite" class="card result-card" id="resultCard" role="status">
+<div class="card-title">نتیجه محاسبه</div>
+<div id="resultContent">
+<div class="result-empty">
+<div class="result-empty-icon">📊</div>
+<p class="result-empty-text">اطلاعات خود را وارد کنید<br/>تا نتیجه به‌صورت زنده نمایش داده شود</p>
+</div>
+</div>
+</div>
+</div><!-- /calculator-layout -->
+</div>
+<script>
+// ═══════════════════════════════════════════════════════
+// TYPE SYSTEM  (Step 1)
+// ═══════════════════════════════════════════════════════
+
+/**
+ * @typedef {'navy'|'bmi'|'skinfold'} CalculatorMethod
+ * @typedef {'male'|'female'} Gender
+ * @typedef {{ value: number, category: string, color: string, description: string, recommendation: string, bmi?: number }} CalculationResult
+ */
+
+// ═══════════════════════════════════════════════════════
+// CALCULATION FUNCTIONS  (Step 3 from doc / utils)
+// ═══════════════════════════════════════════════════════
+
+function calculateNavyBodyFatMale(height, waist, neck) {
+  const diff = waist - neck;
+  if (diff <= 0) return null;
+  const bf = 495 / (1.0324 - 0.19077 * Math.log10(diff) + 0.15456 * Math.log10(height)) - 450;
+  return isFinite(bf) && bf > 0 ? bf : null;
+}
+
+function calculateNavyBodyFatFemale(height, waist, hip, neck) {
+  const diff = waist + hip - neck;
+  if (diff <= 0) return null;
+  const bf = 495 / (1.29579 - 0.35004 * Math.log10(diff) + 0.22100 * Math.log10(height)) - 450;
+  return isFinite(bf) && bf > 0 ? bf : null;
+}
+
+function calculateBMI(weight, heightCm) {
+  const h = heightCm / 100;
+  return weight / (h * h);
+}
+
+function calculateBMIBasedBodyFat(bmi, age, isMale) {
+  const sex = isMale ? 1 : 0;
+  return (1.20 * bmi) + (0.23 * age) - (10.8 * sex) - 5.4;
+}
+
+function calculateSkinfoldBodyFatMale(sum6) {
+  return 3.64 + (0.097 * sum6);
+}
+
+function calculateSkinfoldBodyFatFemale(sum6) {
+  return 4.56 + (0.143 * sum6);
+}
+
+function classifyBodyFatRange(bf, isMale) {
+  if (isMale) {
+    if (bf < 6)  return { category: 'خیلی کم',    color: '#00f0ff', bgColor: 'rgba(0,240,255,0.12)'  };
+    if (bf < 14) return { category: 'ورزشکاری',   color: '#00ff88', bgColor: 'rgba(0,255,136,0.12)'  };
+    if (bf < 18) return { category: 'سالم',        color: '#d4af37', bgColor: 'rgba(212,175,55,0.15)' };
+    if (bf < 25) return { category: 'متوسط',       color: '#ff9f43', bgColor: 'rgba(255,159,67,0.13)' };
+    return             { category: 'بالا',          color: '#ff4757', bgColor: 'rgba(255,71,87,0.13)'  };
+  } else {
+    if (bf < 14) return { category: 'خیلی کم',    color: '#00f0ff', bgColor: 'rgba(0,240,255,0.12)'  };
+    if (bf < 21) return { category: 'ورزشکاری',   color: '#00ff88', bgColor: 'rgba(0,255,136,0.12)'  };
+    if (bf < 25) return { category: 'سالم',        color: '#d4af37', bgColor: 'rgba(212,175,55,0.15)' };
+    if (bf < 32) return { category: 'متوسط',       color: '#ff9f43', bgColor: 'rgba(255,159,67,0.13)' };
+    return             { category: 'بالا',          color: '#ff4757', bgColor: 'rgba(255,71,87,0.13)'  };
+  }
+}
+
+function getDescriptionAndRec(category, isMale) {
+  const map = {
+    'خیلی کم':  {
+      desc: 'سطح چربی بدن شما پایین‌تر از حد بهینه است. این میزان می‌تواند برای سلامت هورمونی و سیستم ایمنی نگران‌کننده باشد.',
+      rec:  'مشورت با متخصص تغذیه برای افزایش چربی سالم توصیه می‌شود.'
+    },
+    'ورزشکاری': {
+      desc: 'درصد چربی شما در محدوده ورزشکاران حرفه‌ای است. بدن شما ترکیب ایده‌آلی برای عملکرد ورزشی دارد.',
+      rec:  'این سطح را با تمرین منظم و تغذیه متوازن حفظ کنید.'
+    },
+    'سالم':     {
+      desc: 'درصد چربی شما در محدوده سالم و مناسب است. این وضعیت برای اکثر افراد بهینه است.',
+      rec:  'ادامه دهید — تمرین و تغذیه فعلی شما موثر است.'
+    },
+    'متوسط':   {
+      desc: 'درصد چربی بدن شما کمی بالاتر از محدوده ایده‌آل است، اما هنوز در سطح قابل قبول قرار دارد.',
+      rec:  'تمرینات هوازی ۳ بار در هفته و کاهش کربوهیدرات‌های ساده می‌تواند کمک‌کننده باشد.'
+    },
+    'بالا':     {
+      desc: 'درصد چربی بدن شما بالاتر از محدوده سالم است. توجه به سبک زندگی ضروری است.',
+      rec:  'مشاوره با متخصص تغذیه و برنامه تمرینی منظم شدیداً توصیه می‌شود.'
+    }
+  };
+  return map[category] || { desc: '', rec: '' };
+}
+
+function formatPercent(val) {
+  if (val === null || !isFinite(val)) return '---';
+  return val.toFixed(1) + '٪';
+}
+
+// ═══════════════════════════════════════════════════════
+// VALIDATION ENGINE  (Step 5)
+// ═══════════════════════════════════════════════════════
+
+const validators = {
+  height:  v => v >= 100 && v <= 250 ? null : 'قد باید بین ۱۰۰ تا ۲۵۰ سانتی‌متر باشد.',
+  weight:  v => v >= 20  && v <= 300 ? null : 'وزن باید بین ۲۰ تا ۳۰۰ کیلوگرم باشد.',
+  waist:   v => v >= 40  && v <= 200 ? null : 'دور کمر باید بین ۴۰ تا ۲۰۰ سانتی‌متر باشد.',
+  neck:    v => v >= 20  && v <= 80  ? null : 'دور گردن باید بین ۲۰ تا ۸۰ سانتی‌متر باشد.',
+  hip:     v => v >= 50  && v <= 200 ? null : 'دور باسن باید بین ۵۰ تا ۲۰۰ سانتی‌متر باشد.',
+  age:     v => v >= 10  && v <= 100 ? null : 'سن باید بین ۱۰ تا ۱۰۰ سال باشد.',
+  skinfold:v => v >= 1   && v <= 100 ? null : 'مقدار باید بین ۱ تا ۱۰۰ میلی‌متر باشد.',
+};
+
+function validateField(name, value) {
+  if (value === '' || value === null || isNaN(parseFloat(value))) {
+    return 'لطفاً یک عدد معتبر وارد کنید.';
+  }
+  const v = parseFloat(value);
+  if (v <= 0) return 'مقدار باید بزرگ‌تر از صفر باشد.';
+  const fn = validators[name] || validators['skinfold'];
+  return fn(v);
+}
+
+// ═══════════════════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════════════════
+
+/** @type {CalculatorMethod} */
+let activeMethod = 'navy';
+
+const state = {
+  navy:     { gender: 'male', height: '', waist: '', neck: '', hip: '' },
+  bmi:      { gender: 'male', height: '', weight: '', age: '' },
+  skinfold: { gender: 'male', m: ['','','','','',''], f: ['','','','','',''] },
+};
+
+// Load from localStorage
+try {
+  const saved = localStorage.getItem('segym-state');
+  if (saved) Object.assign(state, JSON.parse(saved));
+  const savedTab = localStorage.getItem('segym-tab');
+  if (savedTab) activeMethod = savedTab;
+} catch(e) {}
+
+function saveState() {
+  try {
+    localStorage.setItem('segym-state', JSON.stringify(state));
+    localStorage.setItem('segym-tab', activeMethod);
+  } catch(e) {}
+}
+
+// ═══════════════════════════════════════════════════════
+// DEBOUNCE  (Step 7)
+// ═══════════════════════════════════════════════════════
+
+let debounceTimer = null;
+function debounce(fn, ms) {
+  clearTimeout(debounceTimer);
+  debounceTimer = setTimeout(fn, ms);
+}
+
+// ═══════════════════════════════════════════════════════
+// CALCULATOR HOOK / ENGINE  (Step 6)
+// ═══════════════════════════════════════════════════════
+
+function calculate() {
+  if (activeMethod === 'navy')     return calcNavy();
+  if (activeMethod === 'bmi')      return calcBMI();
+  if (activeMethod === 'skinfold') return calcSkinfold();
+  return null;
+}
+
+function calcNavy() {
+  const s = state.navy;
+  const h = parseFloat(s.height), w = parseFloat(s.waist), n = parseFloat(s.neck), hp = parseFloat(s.hip);
+  const isMale = s.gender === 'male';
+  if (isMale) {
+    if (isNaN(h) || isNaN(w) || isNaN(n)) return null;
+    if (w <= n) return { error: 'دور کمر باید بزرگ‌تر از دور گردن باشد.' };
+    const val = calculateNavyBodyFatMale(h, w, n);
+    return val !== null ? buildResult(val, isMale) : null;
+  } else {
+    if (isNaN(h) || isNaN(w) || isNaN(n) || isNaN(hp)) return null;
+    if (w + hp <= n) return { error: 'مجموع دور کمر و باسن باید بزرگ‌تر از دور گردن باشد.' };
+    const val = calculateNavyBodyFatFemale(h, w, hp, n);
+    return val !== null ? buildResult(val, isMale) : null;
+  }
+}
+
+function calcBMI() {
+  const s = state.bmi;
+  const h = parseFloat(s.height), w = parseFloat(s.weight), a = parseFloat(s.age);
+  if (isNaN(h) || isNaN(w) || isNaN(a)) return null;
+  const isMale = s.gender === 'male';
+  const bmi = calculateBMI(w, h);
+  const bf  = calculateBMIBasedBodyFat(bmi, a, isMale);
+  if (!isFinite(bf) || bf <= 0) return null;
+  const res = buildResult(bf, isMale);
+  res.bmi = bmi;
+  return res;
+}
+
+function calcSkinfold() {
+  const s = state.skinfold;
+  const isMale = s.gender === 'male';
+  const vals = isMale ? s.m : s.f;
+  const parsed = vals.map(v => parseFloat(v));
+  if (parsed.some(isNaN)) return null;
+  const sum6 = parsed.reduce((a, b) => a + b, 0);
+  if (sum6 <= 0) return null;
+  const bf = isMale ? calculateSkinfoldBodyFatMale(sum6) : calculateSkinfoldBodyFatFemale(sum6);
+  const res = buildResult(bf, isMale);
+  res.sum6 = sum6;
+  return res;
+}
+
+function buildResult(bf, isMale) {
+  const { category, color, bgColor } = classifyBodyFatRange(bf, isMale);
+  const { desc, rec } = getDescriptionAndRec(category, isMale);
+  return { value: bf, category, color, bgColor, description: desc, recommendation: rec };
+}
+
+// ═══════════════════════════════════════════════════════
+// RENDER  (ResultCard, Gauge, RangeBadge, Description)
+// ═══════════════════════════════════════════════════════
+
+function renderResult(result) {
+  const el = document.getElementById('resultContent');
+  if (!result) {
+    el.innerHTML = `
+      <div class="result-empty">
+        <div class="result-empty-icon">📊</div>
+        <p class="result-empty-text">اطلاعات خود را وارد کنید<br/>تا نتیجه به‌صورت زنده نمایش داده شود</p>
+      </div>`;
+    return;
+  }
+  if (result.error) {
+    el.innerHTML = `
+      <div class="result-empty">
+        <div class="result-empty-icon">⚠️</div>
+        <p class="result-empty-text" style="color:var(--red)">${result.error}</p>
+      </div>`;
+    return;
+  }
+
+  const bf  = result.value;
+  const maxBf = 50;
+  const pct = Math.min((bf / maxBf) * 100, 100);
+
+  // Gauge SVG
+  const R = 80, stroke = 14;
+  const circ = Math.PI * R;
+  const offset = circ - (pct / 100) * circ;
+
+  let extraHTML = '';
+  if (result.bmi !== undefined) {
+    extraHTML = `
+      <div class="bmi-extra">
+        <div class="bmi-stat">
+          <div class="bmi-stat-value">${result.bmi.toFixed(1)}</div>
+          <div class="bmi-stat-label">شاخص توده بدنی (BMI)</div>
+        </div>
+        <div class="bmi-stat">
+          <div class="bmi-stat-value">${bf.toFixed(1)}٪</div>
+          <div class="bmi-stat-label">درصد چربی بدن</div>
+        </div>
+      </div>`;
+  }
+
+  el.innerHTML = `
+    <div class="gauge-wrap">
+      <svg class="gauge-svg" width="210" height="120" viewBox="0 0 210 120" role="img" aria-label="نمایش درصد چربی: ${bf.toFixed(1)} درصد">
+        <path d="M 25 105 A 80 80 0 0 1 185 105" fill="none" stroke="#1c2e52" stroke-width="${stroke}" stroke-linecap="round"/>
+        <path d="M 25 105 A 80 80 0 0 1 185 105" fill="none"
+          stroke="${result.color}" stroke-width="${stroke}" stroke-linecap="round"
+          stroke-dasharray="${circ}" stroke-dashoffset="${circ}"
+          class="gauge-track" id="gaugeTrack"
+          style="filter: drop-shadow(0 0 6px ${result.color})"/>
+        <text x="105" y="95" text-anchor="middle" font-family="Vazirmatn,sans-serif"
+          font-size="30" font-weight="800" fill="${result.color}">${bf.toFixed(1)}٪</text>
+        <text x="105" y="114" text-anchor="middle" font-family="Vazirmatn,sans-serif"
+          font-size="11" fill="#7a8caa">درصد چربی بدن شما</text>
+      </svg>
+    </div>
+
+    <div style="display:flex; justify-content:center; margin-top:4px">
+      <div class="range-badge" style="background:${result.bgColor}; color:${result.color}">
+        <div class="range-badge-dot" style="background:${result.color}; box-shadow: 0 0 6px ${result.color}"></div>
+        ${result.category}
+      </div>
+    </div>
+
+    <div class="range-bar-wrap">
+      <div class="range-bar-label">محدوده چربی بدن (۰ تا ۵۰٪)</div>
+      <div class="range-bar">
+        <div class="range-bar-fill" id="rangeBarFill" style="width:0%; background:${result.color}"></div>
+      </div>
+      <div class="range-ticks">
+        <span class="range-tick">۰٪</span>
+        <span class="range-tick">خیلی کم</span>
+        <span class="range-tick">ورزشکاری</span>
+        <span class="range-tick">سالم</span>
+        <span class="range-tick">۵۰٪</span>
+      </div>
+    </div>
+
+    ${extraHTML}
+
+    <div class="result-description">
+      ${result.description}
+      <div class="result-recommendation">${result.recommendation}</div>
+    </div>
+  `;
+
+  // Animate after paint
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      const track = document.getElementById('gaugeTrack');
+      const bar   = document.getElementById('rangeBarFill');
+      if (track) track.style.strokeDashoffset = offset;
+      if (bar)   bar.style.width = pct + '%';
+    });
+  });
+}
+
+// ═══════════════════════════════════════════════════════
+// INPUT FORMS BUILDER
+// ═══════════════════════════════════════════════════════
+
+function makeField(id, label, unit, name, value, method) {
+  return `
+    <div class="field-group">
+      <label class="field-label" for="${id}">${label}</label>
+      <div class="field-wrap">
+        <input class="field-input" type="number" inputmode="decimal"
+          id="${id}" name="${name}" value="${value}" placeholder="—"
+          autocomplete="off"
+          oninput="onInput('${method}','${name}',this)"
+          onblur="onBlur('${method}','${name}',this)"
+        />
+        <span class="field-unit">${unit}</span>
+      </div>
+      <div class="field-error" id="err-${id}" style="display:none"></div>
+    </div>`;
+}
+
+function buildNavyInputs() {
+  const s = state.navy;
+  const isMale = s.gender === 'male';
+  let html = makeField('navy-height','قد','cm','height', s.height,'navy')
+           + makeField('navy-waist','دور کمر','cm','waist',  s.waist, 'navy')
+           + makeField('navy-neck', 'دور گردن','cm','neck',  s.neck,  'navy');
+  if (!isMale)
+    html += makeField('navy-hip','دور باسن','cm','hip', s.hip,'navy');
+  document.getElementById('navyInputs').innerHTML = html;
+}
+
+function buildBMIInputs() {
+  const s = state.bmi;
+  document.getElementById('bmiInputs').innerHTML =
+      makeField('bmi-height','قد','cm',  'height', s.height,'bmi')
+    + makeField('bmi-weight','وزن','kg', 'weight', s.weight,'bmi')
+    + makeField('bmi-age',   'سن','سال','age',    s.age,   'bmi');
+}
+
+const SKINFOLD_MALE   = ['سینه (chest)','شکم (abdomen)','ران (thigh)','دوسر بازو (biceps)','زیر کتف (subscapular)','پهلو (flank)'];
+const SKINFOLD_FEMALE = ['پشت بازو (triceps)','شکم (abdomen)','ران (thigh)','بالای تاج خاصره (suprailiac)','زیر کتف (subscapular)','ساق پا (calf)'];
+
+function buildSkinfoldInputs() {
+  const s = state.skinfold;
+  const isMale = s.gender === 'male';
+  const labels = isMale ? SKINFOLD_MALE : SKINFOLD_FEMALE;
+  const vals   = isMale ? s.m : s.f;
+  let html = '<div class="inputs-grid">';
+  labels.forEach((lbl, i) => {
+    html += makeField(`sf-${i}`, lbl, 'mm', `sf${i}`, vals[i], 'skinfold');
+  });
+  html += '</div>';
+  document.getElementById('skinfoldInputs').innerHTML = html;
+  updateSkinfoldSum();
+}
+
+function updateSkinfoldSum() {
+  const s = state.skinfold;
+  const isMale = s.gender === 'male';
+  const vals = isMale ? s.m : s.f;
+  const sum = vals.reduce((a, v) => {
+    const n = parseFloat(v);
+    return a + (isNaN(n) ? 0 : n);
+  }, 0);
+  document.getElementById('skinfoldSum').textContent = sum.toFixed(1) + ' mm';
+}
+
+// ═══════════════════════════════════════════════════════
+// EVENT HANDLERS
+// ═══════════════════════════════════════════════════════
+
+function onInput(method, field, el) {
+  // Update state
+  if (method === 'navy')    state.navy[field]    = el.value;
+  if (method === 'bmi')     state.bmi[field]     = el.value;
+  if (method === 'skinfold') {
+    const idx = parseInt(field.replace('sf',''));
+    if (state.skinfold.gender === 'male') state.skinfold.m[idx] = el.value;
+    else                                  state.skinfold.f[idx] = el.value;
+    updateSkinfoldSum();
+  }
+
+  // Clear error while typing
+  const errEl = document.getElementById(`err-${el.id}`);
+  if (errEl) { errEl.style.display = 'none'; el.classList.remove('error'); }
+
+  // Debounced calculate (Step 7)
+  debounce(() => { saveState(); renderResult(calculate()); }, 300);
+}
+
+function onBlur(method, field, el) {
+  const fieldName = field.startsWith('sf') ? 'skinfold' : field;
+  const err = validateField(fieldName, el.value);
+  const errEl = document.getElementById(`err-${el.id}`);
+  if (errEl && err) {
+    errEl.textContent = err;
+    errEl.style.display = 'flex';
+    el.classList.add('error');
+  }
+}
+
+function setGender(method, gender) {
+  state[method].gender = gender;
+  saveState();
+
+  const mBtn = document.getElementById(`${method}MaleBtn`);
+  const fBtn = document.getElementById(`${method}FemaleBtn`);
+  const ind  = document.getElementById(`${method}GenderIndicator`);
+
+  mBtn.classList.toggle('active', gender === 'male');
+  fBtn.classList.toggle('active', gender === 'female');
+  mBtn.setAttribute('aria-pressed', gender === 'male');
+  fBtn.setAttribute('aria-pressed', gender === 'female');
+
+  positionGenderIndicator(ind, gender === 'male' ? mBtn : fBtn);
+
+  if (method === 'navy')     buildNavyInputs();
+  if (method === 'skinfold') buildSkinfoldInputs();
+  renderResult(calculate());
+}
+
+function positionGenderIndicator(ind, btn) {
+  if (!ind || !btn) return;
+  const parent = ind.parentElement;
+  const pr = parent.getBoundingClientRect();
+  const br = btn.getBoundingClientRect();
+  ind.style.left  = (br.left - pr.left) + 'px';
+  ind.style.width = br.width + 'px';
+}
+
+// ═══════════════════════════════════════════════════════
+// TABS  (Step 2)
+// ═══════════════════════════════════════════════════════
+
+function switchTab(tab) {
+  activeMethod = tab;
+  saveState();
+
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    const isActive = btn.dataset.tab === tab;
+    btn.setAttribute('aria-selected', isActive);
+  });
+
+  ['navy','bmi','skinfold'].forEach(t => {
+    document.getElementById(`panel-${t}`).style.display = t === tab ? '' : 'none';
+  });
+
+  positionTabIndicator();
+  renderResult(calculate());
+}
+
+function positionTabIndicator() {
+  const ind    = document.getElementById('tabIndicator');
+  const active = document.querySelector(`.tab-btn[data-tab="${activeMethod}"]`);
+  if (!ind || !active) return;
+  const parent = ind.parentElement;
+  const pr = parent.getBoundingClientRect();
+  const ar = active.getBoundingClientRect();
+  ind.style.left  = (ar.left - pr.left) + 'px';
+  ind.style.width = ar.width + 'px';
+}
+
+// Tab keyboard navigation
+document.addEventListener('keydown', e => {
+  if (!['ArrowLeft','ArrowRight','Enter',' '].includes(e.key)) return;
+  const focused = document.activeElement;
+  if (!focused || !focused.classList.contains('tab-btn')) return;
+  const tabs = Array.from(document.querySelectorAll('.tab-btn'));
+  const idx  = tabs.indexOf(focused);
+  if (e.key === 'ArrowRight' && idx > 0)            { tabs[idx-1].focus(); switchTab(tabs[idx-1].dataset.tab); }
+  if (e.key === 'ArrowLeft'  && idx < tabs.length-1){ tabs[idx+1].focus(); switchTab(tabs[idx+1].dataset.tab); }
+  if (e.key === 'Enter' || e.key === ' ')             switchTab(focused.dataset.tab);
+});
+
+// ═══════════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════════
+
+function init() {
+  buildNavyInputs();
+  buildBMIInputs();
+  buildSkinfoldInputs();
+
+  // Restore gender toggles
+  ['navy','bmi','skinfold'].forEach(m => {
+    const g   = state[m].gender;
+    const mBtn = document.getElementById(`${m}MaleBtn`);
+    const fBtn = document.getElementById(`${m}FemaleBtn`);
+    const ind  = document.getElementById(`${m}GenderIndicator`);
+    mBtn.classList.toggle('active', g === 'male');
+    fBtn.classList.toggle('active', g === 'female');
+    mBtn.setAttribute('aria-pressed', g === 'male');
+    fBtn.setAttribute('aria-pressed', g === 'female');
+    setTimeout(() => positionGenderIndicator(ind, g === 'male' ? mBtn : fBtn), 0);
+  });
+
+  switchTab(activeMethod);
+
+  // Reposition on resize
+  window.addEventListener('resize', () => {
+    positionTabIndicator();
+    ['navy','bmi','skinfold'].forEach(m => {
+      const ind  = document.getElementById(`${m}GenderIndicator`);
+      const g    = state[m].gender;
+      const btn  = document.getElementById(`${m}${g === 'male' ? 'Male' : 'Female'}Btn`);
+      positionGenderIndicator(ind, btn);
+    });
+  });
+}
+
+init();
+</script>
